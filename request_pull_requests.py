@@ -22,13 +22,23 @@ def run_query(query): # Função de chamada a api
 # Query GraphQl 
 query = """
 query pullResquest {
-  repository(name: "JavaGuide", owner: "MDQ6VXNlcjI5ODgwMTQ1") {
+  repository(name: "java-design-patterns", owner: "iluwatar") {
     pullRequests(last: 10) {
       nodes {
         closedAt
         createdAt
         author {
           login
+        }
+        bodyText
+        changedFiles
+        comments {
+          totalCount
+        }
+        files {
+          nodes {
+            path
+          }
         }
       }
     }
