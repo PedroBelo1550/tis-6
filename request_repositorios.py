@@ -6,7 +6,7 @@ import pandas as pd
 from dateutil import parser
 
 
-api_token = "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"
+api_token = "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"
 headers = {'Authorization': 'token %s' % api_token}
 nome_arquivo = "repositorios.csv"
 
@@ -31,6 +31,15 @@ query = """
       ... on Repository {
         nameWithOwner
         url
+        pullRequests{
+          totalCount
+        }
+        closed: pullRequests(states: CLOSED){
+          totalCount
+        }
+        merged: pullRequests(states: MERGED){
+          totalCount
+        }
       }
     }
   }
@@ -54,6 +63,9 @@ while(i < 10):
   df = pd.DataFrame(columns=[
                      'nameWithOwner',
                      'url',
+                     'totalPullRequests',
+                     'closed',
+                     'merged',
                      'processado'])
 
   if i == 0: 
@@ -65,6 +77,9 @@ while(i < 10):
      data = {
          "nameWithOwner" : d['nameWithOwner'],
          "url" : d['url'],
+         "totalPullRequests" : d['pullRequests']['totalCount'],
+         "closed": d['closed']['totalCount'],
+         "merged": d['merged']['totalCount'],
          "processado" : False}
      
      df = pd.DataFrame(data, index=[0])
