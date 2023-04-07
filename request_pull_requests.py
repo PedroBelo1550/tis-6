@@ -67,10 +67,10 @@ while(i < 10):
   if i == 0:
      result = run_query(query)
   else:
-     result = run_query(query.replace("pullRequests(last: 10, after: null)", '" pullRequests(last: 10, after: '  + end_cursor + ')"' ))
+     result = run_query(query.replace("pullRequests(last: 10, after: null)", '"pullRequests(last: 10, after: '  + end_cursor + ')"' ))
   
   end_cursor = result['data']['search']['pageInfo']['endCursor']
-  
+  \
   #Preenche o cabeçalho do CSV
   df = pd.DataFrame(columns=[
                      'nameWithOwner',
