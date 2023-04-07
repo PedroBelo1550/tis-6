@@ -6,9 +6,9 @@ import pandas as pd
 from dateutil import parser
 
 
-api_token = "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"
+api_token = "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"
 headers = {'Authorization': 'token %s' % api_token}
-
+nome_arquivo = "repositorios.csv"
 
 
 def run_query(query): # Função de chamada a api
@@ -29,14 +29,7 @@ query = """
     }
     nodes {
       ... on Repository {
-        createdAt
         nameWithOwner
-        releases(first: 1) {
-          totalCount
-        }
-        stargazers {
-            totalCount
-          }
         url
       }
     }
@@ -44,12 +37,11 @@ query = """
 }
 """
 
-
 end_cursor = '';
 
 i = 0 
 
-while(i < 100):
+while(i < 10):
   
   if i == 0:
      result = run_query(query)
@@ -59,29 +51,25 @@ while(i < 100):
   end_cursor = result['data']['search']['pageInfo']['endCursor']
   
   #Preenche o cabeçalho do CSV
-  df = pd.DataFrame(columns=['createdAt',
+  df = pd.DataFrame(columns=[
                      'nameWithOwner',
-                     'releases',
-                     'stargazers',
                      'url',
                      'processado'])
 
   if i == 0: 
-    df.to_csv('file.csv', mode='a', index=False, header=True)
+    df.to_csv(nome_arquivo, mode='a', index=False, header=True)
 
   for d in result['data']['search']['nodes']:
      
      #Escreve o JSON
-     data = {"createdAt" :  parser.parse(d['createdAt']).strftime("%d/%m/%Y"),
+     data = {
          "nameWithOwner" : d['nameWithOwner'],
-         "releases" : d['releases']['totalCount'],
-         "stargazers" : d['stargazers']['totalCount'],
          "url" : d['url'],
          "processado" : False}
      
      df = pd.DataFrame(data, index=[0])
     
-     df.to_csv('file.csv', mode='a', index=False, header=False)
+     df.to_csv(nome_arquivo, mode='a', index=False, header=False)
 
   i += 1
   print("Execução nº {}".format(i))
