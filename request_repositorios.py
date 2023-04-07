@@ -36,7 +36,7 @@ query = """
       ... on Repository {
         name
         owner {
-          id
+          login
         }
         url
         pullRequests {
@@ -85,7 +85,7 @@ while(i < 10):
      #Escreve o JSON
      data = {
          "name" : d['name'],
-         "owner" : d['owner']['id'],
+         "owner" : d['owner']['login'],
          "url" : d['url'],
          "totalPullRequests" : d['pullRequests']['totalCount'],
          "closed": d['closed']['totalCount'],

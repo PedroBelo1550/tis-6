@@ -21,24 +21,14 @@ def run_query(query): # Função de chamada a api
 
 # Query GraphQl 
 query = """
-{
-  search(query: "language:Java stars:>100", type: REPOSITORY, first: 10, after: null) {
-    pageInfo {
-      hasNextPage
-      endCursor
-    }
-    nodes {
-      ... on Repository {
-        nameWithOwner
-        url
-        pullRequests{
-          totalCount
-        }
-        closed: pullRequests(states: CLOSED){
-          totalCount
-        }
-        merged: pullRequests(states: MERGED){
-          totalCount
+query pullResquest {
+  repository(name: "JavaGuide", owner: "MDQ6VXNlcjI5ODgwMTQ1") {
+    pullRequests(last: 10) {
+      nodes {
+        closedAt
+        createdAt
+        author {
+          login
         }
       }
     }
