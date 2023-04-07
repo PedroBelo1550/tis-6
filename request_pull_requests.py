@@ -6,7 +6,7 @@ import pandas as pd
 from dateutil import parser
 
 
-api_token = "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"
+api_token = "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"
 headers = {'Authorization': 'token %s' % api_token}
 nome_arquivo = "repositorios.csv"
 
@@ -22,30 +22,22 @@ def run_query(query): # Função de chamada a api
 # Query GraphQl 
 query = """
 {
-  search(
-    query: "language:Java stars:>100"
-    type: REPOSITORY
-    first: 10
-    after: null
-  ) {
+  search(query: "language:Java stars:>100", type: REPOSITORY, first: 10, after: null) {
     pageInfo {
       hasNextPage
       endCursor
     }
     nodes {
       ... on Repository {
-        name
-        owner {
-          id
-        }
+        nameWithOwner
         url
-        pullRequests {
+        pullRequests{
           totalCount
         }
-        closed: pullRequests(states: CLOSED) {
+        closed: pullRequests(states: CLOSED){
           totalCount
         }
-        merged: pullRequests(states: MERGED) {
+        merged: pullRequests(states: MERGED){
           totalCount
         }
       }
@@ -69,8 +61,7 @@ while(i < 10):
   
   #Preenche o cabeçalho do CSV
   df = pd.DataFrame(columns=[
-                     'name',
-                     'owner',
+                     'nameWithOwner',
                      'url',
                      'totalPullRequests',
                      'closed',
@@ -84,8 +75,7 @@ while(i < 10):
      
      #Escreve o JSON
      data = {
-         "name" : d['name'],
-         "owner" : d['owner']['id'],
+         "nameWithOwner" : d['nameWithOwner'],
          "url" : d['url'],
          "totalPullRequests" : d['pullRequests']['totalCount'],
          "closed": d['closed']['totalCount'],
