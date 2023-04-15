@@ -43,7 +43,7 @@ def get_dados(name, owner):
     query = """
 query pullResquest {
   repository(name: "java-design-patterns", owner: "iluwatar") {
-    pullRequests(first: 10, after: null) {
+    pullRequests(first: 50, after: null) {
         cursorPull: pageInfo {
         endCursor
         hasNextPage
