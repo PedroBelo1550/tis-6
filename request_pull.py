@@ -12,8 +12,8 @@ nome_arq_files = "files.csv"
 
 
 def change_token(count):
-    api_token_pedro = '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'
-    api_token_y = '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'
+    api_token_pedro = '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'
+    api_token_y = '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'
 
     if (count % 2 == 0):
         return api_token_pedro
@@ -25,16 +25,21 @@ def run_query(query):  # Função de chamada a api
 
     while True:
 
+      try:
         headers = {'Authorization': 'token %s' % change_token(i)}
         request = requests.post('https://api.github.com/graphql',
                                 json={'query': query}, headers=headers)
         if request.status_code != 200:
-            print(request.json())
-            print('Erro recebido. Aguardando 20 minutos...')
-            time.sleep(1200)  # Dorme por 20 minutos
+          print(request.json())
+          print('Erro recebido. Aguardando 5 minutos...')
+          time.sleep(300)  # Dorme por 5 minutos 
         else:
-            print(request.status_code)
-            return request.json()
+          print(request.status_code)
+          return request.json()
+      except Exception as err:
+          print(f'Error: {err}')
+          print(f'Sleeping for 5 minutes...')
+          time.sleep(300)
 
 
 def get_dados(name, owner):
@@ -44,7 +49,7 @@ def get_dados(name, owner):
 query pullResquest {
   repository(name: "java-design-patterns", owner: "iluwatar") {
     pullRequests(first: 50, after: null) {
-        cursorPull: pageInfo {
+      cursorPull: pageInfo {
         endCursor
         hasNextPage
       }
@@ -72,6 +77,9 @@ query pullResquest {
             hasNextPage
             endCursor
           }
+        }
+        mergeCommit {
+          commitUrl
         }
       }
     }
@@ -116,7 +124,7 @@ query pullResquest {
             'authorLogin',
             'bodyText',
             'changedFiles',
-            'comments'])
+            'comments', 'commitUrl'])
         
         df_file = pd.DataFrame(columns=[
                       "name",
@@ -143,7 +151,8 @@ query pullResquest {
                 "authorLogin": d['author']['login'] if d['author'] is not None else 'null',
                 "bodyText": len(d['bodyText']),
                 "changedFiles": d['changedFiles'],
-                "comments": d['comments']['totalCount']
+                "comments": d['comments']['totalCount'],
+                "commitUrl" : d['mergeCommit']['commitUrl']  if d['mergeCommit'] is not None else 'null'
             }
 
             for f in d['files']['nodes']:

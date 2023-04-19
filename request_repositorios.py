@@ -6,7 +6,7 @@ import pandas as pd
 from dateutil import parser
 
 
-api_token = "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"
+api_token = "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"
 headers = {'Authorization': 'token %s' % api_token}
 nome_arquivo = "repositorios.csv"
 
