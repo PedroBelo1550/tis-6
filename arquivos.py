@@ -56,24 +56,55 @@ class Arquivos:
                 except Exception:
                     print('Erro')
 
+    def list_arquivos_closed(self, numero_pull, name, owner):
 
-    def list_arquivo_closed(self, name, owner):
+        access_token = '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'
 
-        access_token = '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'
+        query = """
+        query MyQuery {
+        repository(name: "%s", owner: "%s") {
+            pullRequest(number: %d) {
+            files(first: 100) {
+                nodes {
+                path
+                }
+            }
+            }
+        }
+        }
+        """ % (name, owner, numero_pull)
 
-        # faça uma solicitação GET para a URL da API do GitHub correspondente ao commit desejado
-        url = f'https://api.github.com/repos/{owner}/{name}/commits/{self.hash}'
+        data = {'query': query}
         headers = {'Authorization': f'token {access_token}'}
-        response = requests.get(url, headers=headers)
+        response = requests.post('https://api.github.com/graphql', headers=headers, json=data)
 
-        # analise a resposta JSON para extrair a lista de arquivos modificados
-        commit_data = response.json()
-        print(commit_data)
-        modified_files = commit_data['files']
+    
+        return response.json()
 
-        # imprima a lista de arquivos modificados
-        for file in modified_files:
-            print(file['filename'])
+    def get_arquivos_closed(self, name, owner, num_pull):
+
+        df = self.list_arquivos_closed(num_pull,name,owner)
+
+        df = df['data']['repository']['pullRequest']['files']['nodes']
+
+        for a in df:
+
+            if(a['path'][-5:] == '.java'):
+
+                path = a['path']
+
+                # faça uma solicitação GET para a URL da API do GitHub correspondente ao commit desejado
+                url = f'https://raw.githubusercontent.com/{owner}/{name}/{self.hash}/{path}'
+                response = requests.get(url)
+
+                # analise a resposta JSON para extrair a lista de arquivos modificados
+                commit_data = response.text
+
+                # salva o resultado em um arquivo .java
+                with open("./arquivos/" + path.split("/")[-1][:-5] + "_atual.java", 'w') as fi:
+                    fi.write(commit_data)
+
+       
 
 
 

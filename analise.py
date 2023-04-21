@@ -30,10 +30,10 @@ for d in df.values:
         for c in commits.values:
             arquivo = Arquivos(c[3])
 
-            if(c[3] == 'MERGED'):
+            if(c[4] == 'MERGED'):
                 arquivo.list_arquivos()
             else:
-                arquivo.list_arquivo_closed(c[0], c[1])
+                arquivo.get_arquivos_closed(c[0], c[1], c[2])
 
             break
         
