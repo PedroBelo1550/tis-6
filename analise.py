@@ -28,9 +28,13 @@ for d in df.values:
         pull_request = None
 
         for c in commits.values:
+            print('Numero Commit')
+            print(c[2])
             print(c[3])
             arquivo = Arquivos(c[3])
             arquivo.list_arquivos()
+
+            break
         
             if(i == 0):
                 pull_request = c[2]
@@ -40,9 +44,9 @@ for d in df.values:
 
                 # O código do designate deve ser chamado aqui....
 
-                
-                shutil.rmtree('arquivos')
-                os.mkdir('arquivos')
+
+               # shutil.rmtree('arquivos')
+                #os.mkdir('arquivos')
 
                 break
 
