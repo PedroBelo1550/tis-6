@@ -12,8 +12,8 @@ nome_arq_files = "files.csv"
 
 
 def change_token(count):
-    api_token_pedro = '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'
-    api_token_y = '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'
+    api_token_pedro = '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'
+    api_token_y = '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'
 
     if (count % 2 == 0):
         return api_token_pedro
@@ -46,45 +46,37 @@ def get_dados(name, owner):
 
     # Query GraphQl
     query = """
-query pullResquest {
-  repository(name: "java-design-patterns", owner: "iluwatar") {
-    pullRequests(first: 50, after: null) {
-      cursorPull: pageInfo {
-        endCursor
-        hasNextPage
-      }
-      nodes {
-        id
-        closedAt
-        createdAt
-        state
-        author {
-          login
-        }
-        bodyText
-        changedFiles
-        comments {
-          totalCount
-        }
-        files(first: 100, after: null) {
-          nodes {
-            path
-            changeType
-            additions
-            deletions
-          }
-          cursorFile: pageInfo {
-            hasNextPage
+    query pullResquest {
+      repository(name: "java-design-patterns", owner: "iluwatar") {
+        pullRequests(first: 50, after: null) {
+          cursorPull: pageInfo {
             endCursor
+            hasNextPage
           }
-        }
-        mergeCommit {
-          commitUrl
+          nodes {
+            number
+            closedAt
+            createdAt
+            state
+            author {
+              login
+            }
+            bodyText
+            changedFiles
+            comments {
+              totalCount
+            }
+            commits(first: 100) {
+              nodes {
+                commit {
+                  commitUrl
+                }
+              }
+            }
+          }
         }
       }
     }
-  }
-}
     """
     end_cursor = ''
 
@@ -117,23 +109,20 @@ query pullResquest {
         df_pull = pd.DataFrame(columns=[
             "name",
             "owner",
-            "id",
+            "number",
             'closedAt',
             'createdAt',
             'state',
             'authorLogin',
             'bodyText',
             'changedFiles',
-            'comments', 'commitUrl'])
+            'comments'])
         
         df_file = pd.DataFrame(columns=[
                       "name",
                       "owner",
-                      "id",
-                      'path',
-                      'changeType',
-                      'additions',
-                      'deletions'])
+                      "number",
+                      'commitUrl'])
 
         if i == 0:
             df_pull.to_csv(nome_arq_pull, mode='a', index=False, header=True)
@@ -144,27 +133,25 @@ query pullResquest {
             data_pull = {
                 "name": name,
                 "owner": owner,
-                "id": d['id'],
+                "number": d['number'],
                 "closedAt": d['closedAt'],
                 "createdAt": d['createdAt'],
                 "state": d['state'],
                 "authorLogin": d['author']['login'] if d['author'] is not None else 'null',
                 "bodyText": len(d['bodyText']),
                 "changedFiles": d['changedFiles'],
-                "comments": d['comments']['totalCount'],
-                "commitUrl" : d['mergeCommit']['commitUrl']  if d['mergeCommit'] is not None else 'null'
+                "comments": d['comments']['totalCount']
             }
 
-            for f in d['files']['nodes']:
+            for f in d['commits']['nodes']:
 
                 data_file = {
                     "name": name,
                     "owner": owner,
-                    "id": d['id'],
-                    "path": f['path'],
-                    "changeType": f['changeType'],
-                    "additions": f['additions'],
-                    "deletions": f['deletions']
+                    "number": d['number'],
+                    "commitUrl": f['commit']['commitUrl'],
+                    "processado": False
+                   
                 }
 
                 df_file = pd.DataFrame(data_file, index=[0])

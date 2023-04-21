@@ -46,6 +46,7 @@ for d in df.values:
     i += 1 
 
 #Exclui o diretório
-shutil.rmtree('repositorios')
+#shutil.rmtree('repositorios')
+#os.mkdir('repositorios')
 
 print('Execução do script concluída')
