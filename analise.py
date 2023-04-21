@@ -30,26 +30,28 @@ for d in df.values:
         for c in commits.values:
             arquivo = Arquivos(c[3])
 
-            if(c[4] == 'MERGED'):
-                arquivo.list_arquivos()
-            else:
-                arquivo.get_arquivos_closed(c[0], c[1], c[2])
-
-            break
-        
+           
             if(i == 0):
                 pull_request = c[2]
 
             if(pull_request != c[2]):
                 print('acabou um pull request')
+                break
 
-                # O código do designate deve ser chamado aqui....
+
+            if(c[4] == 'MERGED'):
+                arquivo.list_arquivos()
+            else:
+                arquivo.get_arquivos_closed(c[0], c[1], c[2])
 
 
-               # shutil.rmtree('arquivos')
+               # O código do designate deve ser chamado aqui....
+
+                # delete a pasta arquivos
+                # shutil.rmtree('arquivos')
                 #os.mkdir('arquivos')
 
-                break
+                
 
             i += 1
 
