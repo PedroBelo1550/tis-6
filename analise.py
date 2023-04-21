@@ -3,6 +3,8 @@ from git.repo.base import Repo
 import shutil
 import os
 
+from arquivos import Arquivos
+
 df = pd.read_csv('repositorios.csv')
 
 i = 0
@@ -18,6 +20,14 @@ for d in df.values:
         os.mkdir('repositorios')
         #Clona o repositório
         Repo.clone_from(d[2], 'repositorios')
+
+        commits = pd.read_csv('files.csv')
+
+        for c in commits.values:
+            print(c[3])
+            arquivo = Arquivos(c[3])
+            arquivo.list_arquivos()
+            break
 
         #Executa o CK
         #os.system('java -jar ck.jar ./repositorios false 0 False ./ck_result/')
