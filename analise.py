@@ -23,11 +23,35 @@ for d in df.values:
 
         commits = pd.read_csv('files.csv')
 
+        i = 0
+
+        pull_request = None
+
         for c in commits.values:
             print(c[3])
             arquivo = Arquivos(c[3])
             arquivo.list_arquivos()
-            break
+        
+            if(i == 0):
+                pull_request = c[2]
+
+            if(pull_request != c[2]):
+                print('acabou um pull request')
+
+                # O código do designate deve ser chamado aqui....
+
+                
+                shutil.rmtree('arquivos')
+                os.mkdir('arquivos')
+
+                break
+
+            i += 1
+
+            # if(i == 10):
+            #     break
+            
+
 
         #Executa o CK
         #os.system('java -jar ck.jar ./repositorios false 0 False ./ck_result/')
