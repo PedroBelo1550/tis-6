@@ -12,8 +12,8 @@ nome_arq_files = "files.csv"
 
 
 def change_token(count):
-    api_token_pedro = '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'
-    api_token_y = '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'
+    api_token_pedro = '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'
+    api_token_y = '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'
 
     if (count % 2 == 0):
         return api_token_pedro
@@ -122,7 +122,9 @@ def get_dados(name, owner):
                       "name",
                       "owner",
                       "number",
-                      'commitUrl'])
+                      'commitUrl',
+                       'state',
+                       'processado'])
 
         if i == 0:
             df_pull.to_csv(nome_arq_pull, mode='a', index=False, header=True)
@@ -150,6 +152,7 @@ def get_dados(name, owner):
                     "owner": owner,
                     "number": d['number'],
                     "commitUrl": f['commit']['commitUrl'],
+                    "state": d['state'],
                     "processado": False
                    
                 }

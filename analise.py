@@ -28,11 +28,12 @@ for d in df.values:
         pull_request = None
 
         for c in commits.values:
-            print('Numero Commit')
-            print(c[2])
-            print(c[3])
             arquivo = Arquivos(c[3])
-            arquivo.list_arquivos()
+
+            if(c[3] == 'MERGED'):
+                arquivo.list_arquivos()
+            else:
+                arquivo.list_arquivo_closed(c[0], c[1])
 
             break
         

@@ -2,6 +2,7 @@
 import io
 import subprocess
 import zipfile
+import requests
 class Arquivos:
 
 
@@ -11,6 +12,7 @@ class Arquivos:
 
 
     def list_arquivos(self):
+
         # Executa o comando e captura a saída
 
         file_list = []
@@ -53,6 +55,25 @@ class Arquivos:
                     
                 except Exception:
                     print('Erro')
+
+
+    def list_arquivo_closed(self, name, owner):
+
+        access_token = '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'
+
+        # faça uma solicitação GET para a URL da API do GitHub correspondente ao commit desejado
+        url = f'https://api.github.com/repos/{owner}/{name}/commits/{self.hash}'
+        headers = {'Authorization': f'token {access_token}'}
+        response = requests.get(url, headers=headers)
+
+        # analise a resposta JSON para extrair a lista de arquivos modificados
+        commit_data = response.json()
+        print(commit_data)
+        modified_files = commit_data['files']
+
+        # imprima a lista de arquivos modificados
+        for file in modified_files:
+            print(file['filename'])
 
 
 
