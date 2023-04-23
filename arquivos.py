@@ -58,7 +58,7 @@ class Arquivos:
 
     def list_arquivos_closed(self, numero_pull, name, owner):
 
-        access_token = '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'
+        access_token = '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'
 
         query = """
         query MyQuery {
