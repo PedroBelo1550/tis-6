@@ -53,7 +53,7 @@ for d in df.values:
             for n in diretorios:
                 print(n)
                 input_path = './' +  n
-                output_path = './output'
+                output_path = './output/'
                 command = f'java -jar DesigniteJava.jar -i {input_path} -o {output_path}'
                 result = subprocess.run(command, shell=True, check=True)
 
