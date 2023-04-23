@@ -65,6 +65,7 @@ for d in df.values:
                 cdsm = pd.read_csv(csv_path)
                 cdsm = cdsm.drop(['Project Name', 'Package Name', 'Method Name', 'Cause of the Smell', 'Method start line no'], axis=1)
                 cdsm['commit'] = c[3].split('/')[-1]
+                cdsm['pull_number'] = c[2]
                 cdsm['name'] = d[0]
                 cdsm['owner'] = d[1]
                 cdsm['status'] = c[4]
