@@ -52,10 +52,13 @@ for d in df.values:
             diretorios = ['atual', 'anterior']
             for n in diretorios:
                 print(n)
-                input_path = '/Users/pedrobarcelos/tis-6/' +  n
-                output_path = '/Users/pedrobarcelos/tis-6/output/'
+                input_path = './' +  n
+                output_path = './output/'
                 command = f'java -jar DesigniteJava.jar -i {input_path} -o {output_path}'
-                subprocess.run(command, shell=True, check=True)
+                result = subprocess.run(command, shell=True, check=True)
+
+                print(result.stdout)
+                print(result.stderr)
 
                 # Lê o arquivo CSV usando o pandas
                 csv_path = output_path + 'ImplementationSmells.csv'
