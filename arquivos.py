@@ -58,7 +58,7 @@ class Arquivos:
 
     def list_arquivos_closed(self, numero_pull, name, owner):
 
-        access_token = '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'
+        access_token = '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'
 
         query = """
         query MyQuery {
@@ -76,9 +76,16 @@ class Arquivos:
 
         data = {'query': query}
         headers = {'Authorization': f'token {access_token}'}
-        response = requests.post('https://api.github.com/graphql', headers=headers, json=data)
 
-    
+        try:
+            response = requests.post('https://api.github.com/graphql', headers=headers, json=data)
+
+            if(response.status_code != 200):
+                print(f'Error: {response.text}')
+
+        except Exception as err:
+          print(f'Error: {err}')
+
         return response.json()
 
     def get_arquivos_closed(self, name, owner, num_pull):
