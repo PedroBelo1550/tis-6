@@ -1,7 +1,7 @@
 name,owner,url,totalPullRequests,closed,merged,processado
 JavaGuide,Snailclimb,https://github.com/Snailclimb/JavaGuide,1046,259,785,True
 react-native,facebook,https://github.com/facebook/react-native,12373,11401,681,True
-java-design-patterns,iluwatar,https://github.com/iluwatar/java-design-patterns,1634,547,1078,True
+java-design-patterns,iluwatar,https://github.com/iluwatar/java-design-patterns,1634,547,1078,False
 LeetCodeAnimation,MisterBooo,https://github.com/MisterBooo/LeetCodeAnimation,75,11,63,False
 advanced-java,doocs,https://github.com/doocs/advanced-java,114,39,75,False
 spring-boot,spring-projects,https://github.com/spring-projects/spring-boot,5656,5578,42,False

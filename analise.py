@@ -2,6 +2,7 @@ import pandas as pd
 from git.repo.base import Repo
 import shutil
 import os
+import subprocess
 
 from arquivos import Arquivos
 
@@ -28,6 +29,7 @@ for d in df.values:
         pull_request = None
 
         for c in commits.values:
+
             arquivo = Arquivos(c[3])
 
            
@@ -45,11 +47,48 @@ for d in df.values:
                 arquivo.get_arquivos_closed(c[0], c[1], c[2])
 
 
-               # O código do designate deve ser chamado aqui....
+            # DESIGNITE INI
+            # Executa o comando 
+            diretorios = ['atual', 'anterior']
+            for n in diretorios:
+                print(n)
+                input_path = '/Users/pedrobarcelos/tis-6/' +  n
+                output_path = '/Users/pedrobarcelos/tis-6/output/'
+                command = f'java -jar DesigniteJava.jar -i {input_path} -o {output_path}'
+                subprocess.run(command, shell=True, check=True)
+
+                # Lê o arquivo CSV usando o pandas
+                csv_path = output_path + 'ImplementationSmells.csv'
+                cdsm = pd.read_csv(csv_path)
+                cdsm = cdsm.drop(['Project Name', 'Package Name', 'Method Name', 'Cause of the Smell', 'Method start line no'], axis=1)
+                cdsm['commit'] = c[3].split('/')[-1]
+                cdsm['name'] = d[0]
+                cdsm['owner'] = d[1]
+                cdsm['status'] = c[4]
+                cdsm = cdsm.rename(columns={'Type Name': 'file'})
+                cdsm['file'] = cdsm['file'] + '.' + n
+
+                file_exists = os.path.isfile('code_smells.csv') # Verifica se o arquivo já existe no diretório
+
+                if not file_exists: # Se o arquivo não existe, escreve o cabeçalho
+                    cdsm.to_csv('code_smells.csv', sep=',', index=False, mode='w')
+                    print('vazio')
+                else: # Se o arquivo já existe, adiciona apenas os dados
+                    cdsm.to_csv('code_smells.csv', sep=',', index=False, mode='a', header=False)
+                    print('append')
+                    
+                if(n=='anterior'):
+                    break
+            
+
+
+               # DESIGNITE END
 
                 # delete a pasta arquivos
-                # shutil.rmtree('arquivos')
-                #os.mkdir('arquivos')
+            shutil.rmtree('atual')
+            shutil.rmtree('anterior')
+            os.mkdir('atual')
+            os.mkdir('anterior')
 
                 
 
@@ -77,9 +116,9 @@ for d in df.values:
 
         #Atualiza o arquivo para controlar a coleta. 
         print('Salvando no repositorio.')
-        df.loc[df['name'] == d[0], 'processado'] = True
-        df.to_csv('repositorios.csv', header=[
-                                'name','owner','url','totalPullRequests','closed','merged','processado'], index=False, mode='w')
+        ##df.loc[df['name'] == d[0], 'processado'] = True
+        ##df.to_csv('repositorios.csv', header=[
+         ##                       'name','owner','url','totalPullRequests','closed','merged','processado'], index=False, mode='w')
 
         print('Url concluída')
         break

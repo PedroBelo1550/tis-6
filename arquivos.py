@@ -40,7 +40,7 @@ class Arquivos:
                     result = subprocess.check_output(command, cwd=self.repo_path, shell=True)
 
                     # salva o resultado em um arquivo .java
-                    with open("./arquivos/" + file.split("/")[-1][:-5] + "_atual.java", 'w') as fi:
+                    with open("./atual/" + file.split("/")[-1][:-5] + "_atual.java", 'w') as fi:
                         fi.write(result.decode("utf-8"))
 
                     #Anterior
@@ -49,7 +49,7 @@ class Arquivos:
                     result = subprocess.check_output(command, cwd=self.repo_path, shell=True)
 
                     # salva o resultado em um arquivo .java
-                    with open("./arquivos/" + file.split("/")[-1][:-5] + "_anterior.java", 'w') as fi:
+                    with open("./anterior/" + file.split("/")[-1][:-5] + "_anterior.java", 'w') as fi:
                         fi.write(result.decode("utf-8"))
 
                     
@@ -101,7 +101,7 @@ class Arquivos:
                 commit_data = response.text
 
                 # salva o resultado em um arquivo .java
-                with open("./arquivos/" + path.split("/")[-1][:-5] + "_atual.java", 'w') as fi:
+                with open("./atual/" + path.split("/")[-1][:-5] + "_atual.java", 'w') as fi:
                     fi.write(commit_data)
 
        
