@@ -48,7 +48,7 @@ def get_dados(name, owner):
     query = """
     query pullResquest {
       repository(name: "java-design-patterns", owner: "iluwatar") {
-        pullRequests(first: 50, after: null) {
+        pullRequests(first: 50, after: null, states: [MERGED, CLOSED]) {
           cursorPull: pageInfo {
             endCursor
             hasNextPage
