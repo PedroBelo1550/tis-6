@@ -12,8 +12,8 @@ nome_arq_files = "files.csv"
 
 
 def change_token(count):
-    api_token_pedro = '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'
-    api_token_y = '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'
+    api_token_pedro = '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'
+    api_token_y = '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'
 
     if (count % 2 == 0):
         return api_token_pedro
@@ -191,8 +191,7 @@ for d in repositorios.values:
         try:
             print('Salvando no repositorio.')
             repositorios.loc[repositorios['name'] == d[0], 'processado'] = True
-            repositorios.to_csv('repositorios.csv', header=[
-                                'name', 'owner', 'url', 'processado'], index=False, mode='w')
+            repositorios.to_csv('repositorios.csv', header=True, index=False, mode='w')
         except Exception as e:
             print(e)
 
@@ -200,7 +199,7 @@ for d in repositorios.values:
 
         print("Coletou {} repositorios".format(i))
         print('Dormindo...')
-        time.sleep(60)
+        time.sleep(30)
 
 
 print('finalizou a coleta dos pull Requests')
