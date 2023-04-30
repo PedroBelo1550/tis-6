@@ -12,8 +12,8 @@ nome_arq_files = "files.csv"
 
 
 def change_token(count):
-    api_token_pedro = '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'
-    api_token_y = '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'
+    api_token_pedro = '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'
+    api_token_y = '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'
 
     if (count % 2 == 0):
         return api_token_pedro
