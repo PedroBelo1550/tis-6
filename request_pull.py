@@ -12,8 +12,8 @@ nome_arq_files = "files.csv"
 
 
 def change_token(count):
-    api_token_pedro = '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'
-    api_token_y = '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'
+    api_token_pedro = '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'
+    api_token_y = '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'
 
     if (count % 2 == 0):
         return api_token_pedro
@@ -32,14 +32,14 @@ def run_query(query):  # Função de chamada a api
         if request.status_code != 200:
           print(request.json())
           print('Erro recebido. Aguardando 5 minutos...')
-          time.sleep(300)  # Dorme por 5 minutos 
+          time.sleep(100)  # Dorme por 5 minutos 
         else:
           print(request.status_code)
           return request.json()
       except Exception as err:
           print(f'Error: {err}')
           print(f'Sleeping for 5 minutes...')
-          time.sleep(300)
+          time.sleep(100)
 
 
 def get_dados(name, owner):
@@ -47,7 +47,7 @@ def get_dados(name, owner):
     # Query GraphQl
     query = """
     query pullResquest {
-      repository(name: "java-design-patterns", owner: "iluwatar") {
+      repository(name: "inicio", owner: "inicio") {
         pullRequests(first: 50, after: null, states: [MERGED, CLOSED]) {
           cursorPull: pageInfo {
             endCursor
@@ -199,7 +199,7 @@ for d in repositorios.values:
 
         print("Coletou {} repositorios".format(i))
         print('Dormindo...')
-        time.sleep(30)
+        time.sleep(10)
 
 
 print('finalizou a coleta dos pull Requests')
