@@ -42,17 +42,7 @@ class Arquivos:
                     # salva o resultado em um arquivo .java
                     with open("./atual/" + file.split("/")[-1][:-5] + "_atual.java", 'w') as fi:
                         fi.write(result.decode("utf-8"))
-
-                    #Anterior
-                    command = f"git show {self.hash}~1:{file}"
-
-                    result = subprocess.check_output(command, cwd=self.repo_path, shell=True)
-
-                    # salva o resultado em um arquivo .java
-                    with open("./anterior/" + file.split("/")[-1][:-5] + "_anterior.java", 'w') as fi:
-                        fi.write(result.decode("utf-8"))
-
-                    
+    
                 except Exception:
                     print('Erro')
 
