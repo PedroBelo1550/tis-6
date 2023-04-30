@@ -57,9 +57,6 @@ for d in df.values:
                 command = f'java -jar DesigniteJava.jar -i {input_path} -o {output_path}'
                 result = subprocess.run(command, shell=True, check=True)
 
-                print(result.stdout)
-                print(result.stderr)
-
                 # Lê o arquivo CSV usando o pandas
                 csv_path = output_path + 'ImplementationSmells.csv'
                 cdsm = pd.read_csv(csv_path)
