@@ -3,14 +3,26 @@ from git.repo.base import Repo
 import shutil
 import os
 import subprocess
+from pandas.io import sql
 
 from arquivos import Arquivos
+from my_sql import MySQLConnector
+import sqlalchemy
+database_username = 'admintis'
+database_password = 'Tisseis6'
+database_ip       = 'tis6.mysql.database.azure.com'
+database_name     = 'tis6'
+database_connection = sqlalchemy.create_engine('mysql+mysqlconnector://{0}:{1}@{2}/{3}'.
+                                               format(database_username, database_password, 
+                                                      database_ip, database_name))
 
 df = pd.read_csv('repositorios.csv')
 
 i = 0
 
 for d in df.values:
+
+    print(d[6])
 
     if(d[6] == False):
 
@@ -23,13 +35,16 @@ for d in df.values:
         Repo.clone_from(d[2], 'repositorios')
 
         commits = pd.read_csv('files.csv')
+        commits = commits.query(f'name == "{d[0]}"')
+
+        print(d[0])
 
         i = 0
 
         pull_request = None
 
         for c in commits.values:
-
+        
             if(c[5] == False):
                 arquivo = Arquivos(c[3])
 
@@ -69,31 +84,26 @@ for d in df.values:
 
                     file_exists = os.path.isfile('code_smells.csv') # Verifica se o arquivo já existe no diretório
 
-                    if not file_exists: # Se o arquivo não existe, escreve o cabeçalho
-                        cdsm.to_csv('code_smells.csv', sep=',', index=False, mode='w')
-                        print('vazio')
-                    else: # Se o arquivo já existe, adiciona apenas os dados
-                        cdsm.to_csv('code_smells.csv', sep=',', index=False, mode='a', header=False)
-                        print('append')
-                        
-                    if(n=='anterior'):
-                        break
+                    print(cdsm)
+
+                    # Inserindo os dados na tabela
+                    cdsm.to_sql(name='code_smells', con=database_connection, if_exists='append', index=False)                    
+                  
                 
                 # DESIGNITE END
                 shutil.rmtree('atual')
                 os.mkdir('atual')
+
+                #DEU PAU AQUI.....
+                commits.loc[commits['commitUrl'].str.split("/")[-1] == d[3], 'processado'] = True
+                commits.to_csv('files.csv', header=True, index=False, mode='w')
 
                 i += 1
 
         #Atualiza o arquivo para controlar a coleta. 
         print('Salvando no repositorio.')
 
-        df.loc[df['name'] == d[0], 'processado'] = True
-        df.to_csv('repositorios.csv', header=True, index=False, mode='w')
-
-        commits.loc[df['commitUrl'].split("/")[-1] == d[3], 'processado'] = True
-        commits.to_csv('files.csv', header=True, index=False, mode='w')
-
+     
         print('Url concluída')
         break
 
