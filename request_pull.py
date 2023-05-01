@@ -32,6 +32,7 @@ def run_query(query):  # Função de chamada a api
           print(request.status_code)
           return request.json()
       except Exception as err:
+          err.with_traceback()
           print(f'Error: {err}')
           print(f'Sleeping for 30 seconds...')
           time.sleep(30)
