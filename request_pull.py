@@ -12,8 +12,8 @@ nome_arq_files = "files.csv"
 
 
 def change_token(count):
-    api_token_pedro = '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'
-    api_token_y = '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'
+    api_token_pedro = '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'
+    api_token_y = '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'
 
     if (count % 2 == 0):
         return api_token_pedro
@@ -31,15 +31,15 @@ def run_query(query):  # Função de chamada a api
                                 json={'query': query}, headers=headers)
         if request.status_code != 200:
           print(request.json())
-          print('Erro recebido. Aguardando 5 minutos...')
-          time.sleep(100)  # Dorme por 5 minutos 
+          print('Erro recebido. sleeping 30 seconds...')
+          time.sleep(30)  # Dorme por 5 minutos 
         else:
           print(request.status_code)
           return request.json()
       except Exception as err:
           print(f'Error: {err}')
-          print(f'Sleeping for 5 minutes...')
-          time.sleep(100)
+          print(f'Sleeping for 30 seconds...')
+          time.sleep(30)
 
 
 def get_dados(name, owner):
@@ -48,7 +48,7 @@ def get_dados(name, owner):
     query = """
     query pullResquest {
       repository(name: "inicio", owner: "inicio") {
-        pullRequests(first: 50, after: null, states: [MERGED, CLOSED]) {
+        pullRequests(first: 40, after: null, states: [MERGED, CLOSED]) {
           cursorPull: pageInfo {
             endCursor
             hasNextPage
