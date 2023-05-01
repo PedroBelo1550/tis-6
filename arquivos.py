@@ -1,14 +1,14 @@
 
-import io
 import subprocess
-import zipfile
 import requests
+from token_git import TokenGit
 class Arquivos:
 
 
     def __init__(self, url_commit: str) -> None:
         self.repo_path = "./repositorios"
         self.hash = url_commit.split("/")[-1]
+        self.token = TokenGit()
 
 
     def list_arquivos(self):
@@ -46,9 +46,9 @@ class Arquivos:
                 except Exception:
                     print('Erro')
 
-    def list_arquivos_closed(self, numero_pull, name, owner):
+    def list_arquivos_closed(self, numero_pull, name, owner, i):
 
-        access_token = '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'
+        access_token = self.token.get_Token(i)
 
         query = """
         query MyQuery {
@@ -78,9 +78,9 @@ class Arquivos:
 
         return response.json()
 
-    def get_arquivos_closed(self, name, owner, num_pull):
+    def get_arquivos_closed(self, name, owner, num_pull, i):
 
-        df = self.list_arquivos_closed(num_pull,name,owner)
+        df = self.list_arquivos_closed(num_pull,name,owner, i)
 
         df = df['data']['repository']['pullRequest']['files']['nodes']
 

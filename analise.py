@@ -53,7 +53,7 @@ for d in df.values:
                 if(c[4] == 'MERGED'):
                     arquivo.list_arquivos()
                 else:
-                    arquivo.get_arquivos_closed(c[0], c[1], c[2])
+                    arquivo.get_arquivos_closed(c[0], c[1], c[2], i)
 
                 input_path = './atual' 
                 output_path = './output/'

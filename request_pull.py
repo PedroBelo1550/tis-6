@@ -5,21 +5,16 @@ import requests
 import pandas as pd
 import time
 
+from token_git import TokenGit
+
 nome_arq_pull = "pull_requests.csv"
 nome_arq_files = "files.csv"
 
 # Alterna o token de acesso
-
-
 def change_token(count):
-    api_token_pedro = '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'
-    api_token_y = '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'
-
-    if (count % 2 == 0):
-        return api_token_pedro
-    else:
-        return api_token_y
-
+  token = TokenGit()
+  return token.get_Token(count)
+  
 
 def run_query(query):  # Função de chamada a api
 
