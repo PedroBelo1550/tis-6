@@ -5,6 +5,7 @@ import os
 import subprocess
 from arquivos import Arquivos
 import sqlalchemy
+import send2trash
 
 #Banco de dados, conexao
 database_username = 'admintis'
@@ -25,14 +26,14 @@ for d in df.values:
 
         print('Clonando respositório {}'.format(d[1]))
         #Exclui o diretório
-        shutil.rmtree('repositorios')
+        send2trash.send2trash('repositorios')
         #Cria o diretório
         os.mkdir('repositorios')
         #Clona o repositório
         Repo.clone_from(d[2], 'repositorios')
 
-        commits = pd.read_csv('files.csv')
-        commits = commits.query(f'name == "{d[0]}"')
+        df_completo = pd.read_csv('files.csv')
+        commits = df_completo.query(f'name == "{d[0]}"')
 
         i = 0
 
@@ -55,40 +56,42 @@ for d in df.values:
                 else:
                     arquivo.get_arquivos_closed(c[0], c[1], c[2], i)
 
+            
                 input_path = './atual' 
                 output_path = './output/'
-                command = f'java -jar DesigniteJava.jar -i {input_path} -o {output_path}'
-                result = subprocess.run(command, shell=True, check=True)
 
-                # Lê o arquivo CSV usando o pandas
-                csv_path = output_path + 'ImplementationSmells.csv'
-                cdsm = pd.read_csv(csv_path)
-                cdsm = cdsm.drop(['Project Name', 'Package Name', 'Method Name', 'Cause of the Smell', 'Method start line no'], axis=1)
-                cdsm['commit'] = c[3].split('/')[-1]
-                cdsm['pull_number'] = c[2]
-                cdsm['name'] = d[0]
-                cdsm['owner'] = d[1]
-                cdsm['status'] = c[4]
-                cdsm = cdsm.rename(columns={'Type Name': 'file'})
-                cdsm['file'] = cdsm['file'] + '.atual' 
-                file_exists = os.path.isfile('code_smells.csv') # Verifica se o arquivo já existe no diretório
+                if os.listdir(input_path):
+                    command = f'java -jar DesigniteJava.jar -i {input_path} -o {output_path}'
+                    result = subprocess.run(command, shell=True, check=True)
 
-                # Inserindo os dados na tabela do banco de dados
-                cdsm.to_sql(name='code_smells', con=database_connection, if_exists='append', index=False)                    
-                  
-                # DESIGNITE END
-                shutil.rmtree('atual')
-                os.mkdir('atual')
+                    # Lê o arquivo CSV usando o pandas
+                    csv_path = output_path + 'ImplementationSmells.csv'
+                    cdsm = pd.read_csv(csv_path)
+                    cdsm = cdsm.drop(['Project Name', 'Package Name', 'Method Name', 'Cause of the Smell', 'Method start line no'], axis=1)
+                    cdsm['commit'] = c[3].split('/')[-1]
+                    cdsm['pull_number'] = c[2]
+                    cdsm['name'] = d[0]
+                    cdsm['owner'] = d[1]
+                    cdsm['status'] = c[4]
+                    cdsm = cdsm.rename(columns={'Type Name': 'file'})
+                    cdsm['file'] = cdsm['file'] + '.atual' 
+                    file_exists = os.path.isfile('code_smells.csv') # Verifica se o arquivo já existe no diretório
 
-                commits.loc[commits['commitUrl'] == c[3], 'processado'] = True
-                commits.to_csv('files.csv', header=True, index=False, mode='w')
+                    # Inserindo os dados na tabela do banco de dados
+                    cdsm.to_sql(name='code_smells', con=database_connection, if_exists='append', index=False)                    
+                    
+                    # DESIGNITE END
+                    send2trash.send2trash('atual')
+                    os.mkdir('atual')
+
+                df_completo.loc[df_completo['commitUrl'] == c[3], 'processado'] = True
+                df_completo.to_csv('files.csv', header=True, index=False, mode='w')
 
                 i += 1
 
         #Atualiza o arquivo para controlar a coleta. 
         print('Salvando no repositorio.')
         print('Url concluída')
-        break
 
     i += 1 
 
