@@ -33,6 +33,7 @@ for d in df.values:
         Repo.clone_from(d[2], 'repositorios')
 
         df_completo = pd.read_csv('files.csv')
+        
         commits = df_completo.query(f'name == "{d[0]}"')
 
         i = 0
@@ -48,7 +49,7 @@ for d in df.values:
                     pull_request = c[2]
 
                 if(pull_request != c[2]):
-                    print('acabou um pull request')
+                    print(f'acabou um pull request do repositorio {d[1]}, percentual executado:  {(i / len(commits) * 100)}')
                 # break
 
                 if(c[4] == 'MERGED'):
@@ -87,10 +88,12 @@ for d in df.values:
                 df_completo.loc[df_completo['commitUrl'] == c[3], 'processado'] = True
                 df_completo.to_csv('files.csv', header=True, index=False, mode='w')
 
-                i += 1
+            i += 1
 
         #Atualiza o arquivo para controlar a coleta. 
         print('Salvando no repositorio.')
+        df.loc[df['name'] == d[0], 'processado'] = True
+        df.to_csv('repositorios.csv', header=True, index=False, mode='w')
         print('Url concluída')
 
     i += 1 
