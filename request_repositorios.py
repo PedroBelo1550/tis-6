@@ -3,13 +3,12 @@
 
 import requests
 import pandas as pd
-from dateutil import parser
+from token_git import TokenGit
 
-
-api_token = "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"
+api_token = TokenGit()
+api_token = api_token.get_Token(0)
 headers = {'Authorization': 'token %s' % api_token}
-nome_arquivo = "repositorios.csv"
-
+nome_arquivo = "repos2.csv"
 
 def run_query(query): # Função de chamada a api
     request = requests.post('https://api.github.com/graphql', json={'query': query}, headers=headers)
@@ -17,7 +16,6 @@ def run_query(query): # Função de chamada a api
         return request.json()
     else:
         raise Exception("Query failed to run by returning code of {}. {}".format(request.text, query))
-
 
 # Query GraphQl 
 query = """
@@ -58,7 +56,7 @@ end_cursor = '';
 
 i = 0 
 
-while(i < 10):
+while(i < 20):
   
   if i == 0:
      result = run_query(query)
