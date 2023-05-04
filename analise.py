@@ -95,9 +95,9 @@ for d in df.values:
                     os.mkdir('atual')
 
                 with database_connection.connect() as conn:
-                        stmt = sqlalchemy.text("update commit set processado = 'True' where name = :name and owner = :owner and commitUrl = :url")
-                        result = conn.execute(stmt, {'name' : d[0], 'owner': d[1],'url': c[3]})
-                        conn.commit()
+                    stmt = sqlalchemy.text("update commit set processado = 'True' where name = :name and owner = :owner and commitUrl = :url")
+                    result = conn.execute(stmt, {'name' : d[0], 'owner': d[1],'url': c[3]})
+                    conn.commit()
 
             i += 1
 
