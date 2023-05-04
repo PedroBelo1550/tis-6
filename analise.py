@@ -18,6 +18,8 @@ database_connection = sqlalchemy.create_engine('mysql+mysqlconnector://{0}:{1}@{
 conn = database_connection.connect()
 
 df = pd.read_csv('repositorios.csv')
+send2trash.send2trash('atual')
+send2trash.send2trash('output')
 os.mkdir('atual')
 os.mkdir('output')
 
