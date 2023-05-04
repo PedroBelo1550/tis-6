@@ -90,11 +90,6 @@ for d in df.values:
                     send2trash.send2trash('atual')
                     os.mkdir('atual')
 
-                    print(c[3])
-
-                    print(f"name {d[0]}")
-                    print(f"owner {d[1]}")
-
                     with database_connection.connect() as conn:
                         stmt = sqlalchemy.text("update commit set processado = 'True' where name = :name and owner = :owner and commitUrl = :url")
                         result = conn.execute(stmt, {'name' : d[0], 'owner': d[1],'url': c[3]})
@@ -106,7 +101,7 @@ for d in df.values:
         print('Salvando no repositorio.')
         df.loc[df['name'] == d[0], 'processado'] = True
         df.to_csv('repositorios.csv', header=True, index=False, mode='w')
-        print('Url concluída')
+        print(f'Repositório {d[0]} processado')
 
     i += 1 
 
