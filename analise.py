@@ -15,6 +15,7 @@ database_name     = 'tis6'
 database_connection = sqlalchemy.create_engine('mysql+mysqlconnector://{0}:{1}@{2}/{3}'.
                                                format(database_username, database_password, 
                                                       database_ip, database_name))
+conn = database_connection.connect()
 
 df = pd.read_csv('repositorios.csv')
 
@@ -32,9 +33,12 @@ for d in df.values:
         #Clona o repositório
         Repo.clone_from(d[2], 'repositorios')
 
+        stmt = sqlalchemy.text("CALL get_commit(:param1, :param2)")
+
         #Passa como parâmetro o owner e o name do repositório.
-        commits = pd.read_sql_query(f"call get_commit('{d[2]}', '{d[1]}')", con=database_connection)
-        
+        # chamar o stored procedure e carregar o resultado em um DataFrame
+        commits = pd.read_sql(stmt, con=conn, params={"param1": d[1], "param2": d[0]})
+
         print(len(commits))
 
         i = 0
@@ -42,8 +46,8 @@ for d in df.values:
         pull_request = None
 
         for c in commits.values:
-        
-            if(c[5] == False):
+
+            if(c[5] == 'False'):
                 arquivo = Arquivos(c[3])
 
                 if(i == 0):
@@ -86,7 +90,11 @@ for d in df.values:
                     send2trash.send2trash('atual')
                     os.mkdir('atual')
 
-                    database_connection.connect().execute(f"update commit set processado = 'True' where commitUrl = {c[3]}")
+                    # criar um objeto text com a instrução SQL para o update
+                    stmt = sqlalchemy.text("UPDATE commit SET processado = 'True' WHERE commitUrl = :url")
+
+                    # chamar o método execute do objeto Connection, passando o objeto text e os parâmetros
+                    database_connection.connect().execute(stmt, {'url': c[3]})    
 
             i += 1
 
