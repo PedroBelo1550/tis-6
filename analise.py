@@ -32,9 +32,10 @@ for d in df.values:
         #Clona o repositório
         Repo.clone_from(d[2], 'repositorios')
 
-        df_completo = pd.read_csv('files.csv')
+        #Passa como parâmetro o owner e o name do repositório.
+        commits = pd.read_sql_query(f"call get_commit('{d[2]}', '{d[1]}')", con=database_connection)
         
-        commits = df_completo.query(f'name == "{d[0]}"')
+        print(len(commits))
 
         i = 0
 
@@ -85,8 +86,7 @@ for d in df.values:
                     send2trash.send2trash('atual')
                     os.mkdir('atual')
 
-                df_completo.loc[df_completo['commitUrl'] == c[3], 'processado'] = True
-                df_completo.to_csv('files.csv', header=True, index=False, mode='w')
+                    database_connection.connect().execute(f"update commit set processado = 'True' where commitUrl = {c[3]}")
 
             i += 1
 
