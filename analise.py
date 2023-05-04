@@ -90,11 +90,15 @@ for d in df.values:
                     send2trash.send2trash('atual')
                     os.mkdir('atual')
 
-                    # criar um objeto text com a instrução SQL para o update
-                    stmt = sqlalchemy.text("UPDATE commit SET processado = 'True' WHERE commitUrl = :url")
+                    print(c[3])
 
-                    # chamar o método execute do objeto Connection, passando o objeto text e os parâmetros
-                    database_connection.connect().execute(stmt, {'url': c[3]})    
+                    print(f"name {d[0]}")
+                    print(f"owner {d[1]}")
+
+                    with database_connection.connect() as conn:
+                        stmt = sqlalchemy.text("update commit set processado = 'True' where name = :name and owner = :owner and commitUrl = :url")
+                        result = conn.execute(stmt, {'name' : d[0], 'owner': d[1],'url': c[3]})
+                        conn.commit()
 
             i += 1
 
