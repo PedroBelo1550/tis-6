@@ -94,7 +94,7 @@ for d in df.values:
                     send2trash.send2trash('atual')
                     os.mkdir('atual')
 
-                    with database_connection.connect() as conn:
+                with database_connection.connect() as conn:
                         stmt = sqlalchemy.text("update commit set processado = 'True' where name = :name and owner = :owner and commitUrl = :url")
                         result = conn.execute(stmt, {'name' : d[0], 'owner': d[1],'url': c[3]})
                         conn.commit()
