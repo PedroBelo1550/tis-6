@@ -6,28 +6,22 @@ import os
 import subprocess
 from arquivos import Arquivos
 import sqlalchemy
-import send2trash
-import win32api
+import stat
 import platform
+
+def remove_readonly(func, path, excinfo):
+    os.chmod(path, stat.S_IWRITE)
+    func(path)
 
 def move_to_trash(file_path):
 
-    """
-    Move o arquivo para a lixeira ou para a pasta .Trash, dependendo do sistema operacional.
-    """
     system = platform.system()
     if system == 'Windows':
-        # Obter o SID do usuário atual
-        sid = win32api.GetUserNameEx(win32api.NameSamCompatible).split('\\')[-1]
-        trash_path = os.path.join('C:\\', '$Recycle.Bin', sid)
-        shutil.move(file_path, trash_path)
-    elif system == 'Darwin':
-        # Mover o arquivo para a pasta lixeira do usuário atual
-        trash_path = os.path.expanduser('~/.Trash')
-        shutil.move(file_path, trash_path)
-    else:
-        # Usar o módulo send2trash para enviar o arquivo para a lixeira
-        send2trash.send2trash(file_path)
+        shutil.rmtree(file_path, onerror=remove_readonly)
+    else: 
+        shutil.rmtree(file_path)
+
+        
 
 
 #Banco de dados, conexao
