@@ -1,3 +1,4 @@
+import time
 import pandas as pd
 from git.repo.base import Repo
 import shutil
@@ -63,7 +64,7 @@ for d in df.values:
                     pull_request = c[2]
 
                 if(pull_request != c[2]):
-                    print(f'acabou um pull request do repositorio {d[1]}, percentual executado:  {(i / len(commits) * 100)}')
+                    print(f'acabou um pull request do repositorio {d[0]}, percentual executado:  {(i / len(commits) * 100)}')
                 # break
 
                 if(c[4] == 'MERGED'):
@@ -81,7 +82,7 @@ for d in df.values:
 
                     # Lê o arquivo CSV usando o pandas
                     csv_path = output_path + 'ImplementationSmells.csv'
-                    cdsm = pd.read_csv(csv_path)
+                    cdsm = pd.read_csv(csv_path, encoding='ISO-8859-1')
                     cdsm = cdsm.drop(['Project Name', 'Package Name', 'Method Name', 'Cause of the Smell', 'Method start line no'], axis=1)
                     cdsm['commit'] = c[3].split('/')[-1]
                     cdsm['pull_number'] = c[2]
@@ -110,7 +111,8 @@ for d in df.values:
         print('Salvando no repositorio.')
         df.loc[df['name'] == d[0], 'processado'] = True
         df.to_csv('repositorios.csv', header=True, index=False, mode='w')
-        print(f'Repositório {d[0]} processado')
+        print(f'Repositório {d[0]} processado, dormindo por 5 segundos...')
+        time.sleep(5)
 
     i += 1 
 
