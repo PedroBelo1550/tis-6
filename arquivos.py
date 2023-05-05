@@ -98,7 +98,7 @@ class Arquivos:
                 commit_data = response.text
 
                 # salva o resultado em um arquivo .java
-                with open("./atual/" + path.split("/")[-1][:-5] + "_atual.java", 'w') as fi:
+                with open("./atual/" + path.split("/")[-1][:-5] + "_atual.java", 'w', encoding='utf-8') as fi:
                     fi.write(commit_data)
 
        
