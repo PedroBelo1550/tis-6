@@ -7,6 +7,28 @@ import subprocess
 from arquivos import Arquivos
 import sqlalchemy
 import send2trash
+import win32api
+import platform
+
+def move_to_trash(file_path):
+
+    """
+    Move o arquivo para a lixeira ou para a pasta .Trash, dependendo do sistema operacional.
+    """
+    system = platform.system()
+    if system == 'Windows':
+        # Obter o SID do usuário atual
+        sid = win32api.GetUserNameEx(win32api.NameSamCompatible).split('\\')[-1]
+        trash_path = os.path.join('C:\\', '$Recycle.Bin', sid)
+        shutil.move(file_path, trash_path)
+    elif system == 'Darwin':
+        # Mover o arquivo para a pasta lixeira do usuário atual
+        trash_path = os.path.expanduser('~/.Trash')
+        shutil.move(file_path, trash_path)
+    else:
+        # Usar o módulo send2trash para enviar o arquivo para a lixeira
+        send2trash.send2trash(file_path)
+
 
 #Banco de dados, conexao
 database_username = 'admintis'
@@ -21,10 +43,10 @@ conn = database_connection.connect()
 df = pd.read_csv('repositorios.csv')
 
 if os.path.isdir('atual'):
-    send2trash.send2trash('atual')
+    move_to_trash('atual')
 
 if os.path.isdir('output'):
-    send2trash.send2trash('output')
+    move_to_trash('output')
     
 os.mkdir('atual')
 os.mkdir('output')
@@ -37,7 +59,7 @@ for d in df.values:
 
         print('Clonando respositório {}'.format(d[1]))
         #Exclui o diretório
-        send2trash.send2trash('repositorios')
+        move_to_trash('repositorios')
         #Cria o diretório
         os.mkdir('repositorios')
         #Clona o repositório
@@ -99,7 +121,7 @@ for d in df.values:
                     cdsm.to_sql(name='code_smells', con=database_connection, if_exists='append', index=False)                    
                     
                     # DESIGNITE END
-                    send2trash.send2trash('atual')
+                    move_to_trash('atual')
                     os.mkdir('atual')
 
                 with database_connection.connect() as conn:
