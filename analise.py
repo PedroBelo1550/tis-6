@@ -49,7 +49,9 @@ for d in df.values:
         # chamar o stored procedure e carregar o resultado em um DataFrame
         commits = pd.read_sql(stmt, con=conn, params={"param1": d[1], "param2": d[0]})
 
-        print(len(commits))
+
+        tamanho_df = len(commits)
+        print(f"tamanho df {tamanho_df}")
 
         i = 0
 
@@ -64,7 +66,7 @@ for d in df.values:
                     pull_request = c[2]
 
                 if(pull_request != c[2]):
-                    print(f'acabou um pull request do repositorio {d[0]}, percentual executado:  {(i / len(commits) * 100)}')
+                    print(f'acabou um pull request do repositorio {d[0]}, percentual executado:  {(i / tamanho_df * 100)}')
                 # break
 
                 if(c[4] == 'MERGED'):
