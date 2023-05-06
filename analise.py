@@ -25,7 +25,6 @@ def move_to_trash(file_path):
             
             return True
         except Exception as err:
-            err.with_traceback()
             print(f'Error ao excluir o arquivo: {err}')
             print('Sleeping for 5 seconds...')
             time.sleep(5)
