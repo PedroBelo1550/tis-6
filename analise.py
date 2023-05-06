@@ -15,11 +15,20 @@ def remove_readonly(func, path, excinfo):
 
 def move_to_trash(file_path):
 
-    system = platform.system()
-    if system == 'Windows':
-        shutil.rmtree(file_path, onerror=remove_readonly)
-    else: 
-        shutil.rmtree(file_path)
+    while True:
+        try:
+            system = platform.system()
+            if system == 'Windows':
+                shutil.rmtree(file_path, onerror=remove_readonly)
+            else: 
+                shutil.rmtree(file_path)
+            
+            return True
+        except Exception as err:
+            err.with_traceback()
+            print(f'Error ao excluir o arquivo: {err}')
+            print('Sleeping for 5 seconds...')
+            time.sleep(5)
 
         
 
