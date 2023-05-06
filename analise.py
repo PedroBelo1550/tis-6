@@ -58,6 +58,8 @@ i = 0
 
 for d in df.values:
 
+    conn = database_connection.connect()
+
     if(d[6] == False):
 
         print('Clonando respositório {}'.format(d[1]))
