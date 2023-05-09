@@ -1,14 +1,4 @@
 name,owner,url,totalPullRequests,closed,merged,processado
-nacos,alibaba,https://github.com/alibaba/nacos,3264,925,2329,False
-hutool,dromara,https://github.com/dromara/hutool,750,385,365,False
-miaosha,qiurunze123,https://github.com/qiurunze123/miaosha,69,48,20,False
-vhr,lenve,https://github.com/lenve/vhr,76,22,1,False
-butterknife,JakeWharton,https://github.com/JakeWharton/butterknife,491,127,346,False
-SpringAll,wuyouzhuguli,https://github.com/wuyouzhuguli/SpringAll,22,9,1,False
-spring-boot-examples,ityouknow,https://github.com/ityouknow/spring-boot-examples,46,40,6,False
-apollo,apolloconfig,https://github.com/apolloconfig/apollo,1613,276,1325,False
-easyexcel,alibaba,https://github.com/alibaba/easyexcel,355,164,138,False
-libgdx,libgdx,https://github.com/libgdx/libgdx,3489,916,2495,False
 termux-app,termux,https://github.com/termux/termux-app,305,129,136,False
 RxAndroid,ReactiveX,https://github.com/ReactiveX/RxAndroid,238,61,177,False
 eladmin,elunez,https://github.com/elunez/eladmin,160,78,76,False
