@@ -1,11 +1,4 @@
 name,owner,url,totalPullRequests,closed,merged,processado
-MPAndroidChart,PhilJay,https://github.com/PhilJay/MPAndroidChart,493,179,190,False
-jeecg-boot,jeecgboot,https://github.com/jeecgboot/jeecg-boot,185,152,17,False
-jadx,skylot,https://github.com/skylot/jadx,437,61,375,False
-JCSprout,crossoverJie,https://github.com/crossoverJie/JCSprout,114,30,69,False
-halo,halo-dev,https://github.com/halo-dev/halo,1325,187,1128,False
-druid,alibaba,https://github.com/alibaba/druid,1320,161,1007,False
-selenium,SeleniumHQ,https://github.com/SeleniumHQ/selenium,2866,1538,1300,False
 nacos,alibaba,https://github.com/alibaba/nacos,3264,925,2329,False
 hutool,dromara,https://github.com/dromara/hutool,750,385,365,False
 miaosha,qiurunze123,https://github.com/qiurunze123/miaosha,69,48,20,False
